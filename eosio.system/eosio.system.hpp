@@ -50,7 +50,7 @@ namespace eosiosystem {
       int64_t              total_activated_stake = 0;
       uint64_t             thresh_activated_stake_time = 0;
       uint16_t             last_producer_schedule_size = 0;
-      double               total_producer_vote_weight = 0; /// the sum of all producer votes
+      int64_t              total_producer_vote_weight = 0; /// the sum of all producer votes
       block_timestamp      last_name_close;
 
       // explicit serialization macro is not necessary, used here only to improve compilation time
@@ -63,7 +63,7 @@ namespace eosiosystem {
 
    struct producer_info {
       account_name          owner;
-      double                total_votes = 0;
+      int64_t               total_votes = 0;
       eosio::public_key     producer_key; /// a packed public key object
       bool                  is_active = true;
       std::string           url;
@@ -201,7 +201,9 @@ namespace eosiosystem {
 
          void setram( uint64_t max_ram_size );
 
-         void voteproducer( const account_name voter, const account_name proxy, const std::vector<account_name>& producers );
+         // void voteproducer( const account_name voter, const account_name proxy, const std::vector<account_name>& producers );
+
+         void voteproducer( const account_name voter_name, const account_name target_producer, asset quantity );
 
          void regproxy( const account_name proxy, bool isproxy );
 
@@ -227,10 +229,12 @@ namespace eosiosystem {
          //defined in voting.hpp
          static eosio_global_state get_default_parameters();
 
-         void update_votes( const account_name voter, const account_name proxy, const std::vector<account_name>& producers, bool voting );
+         // void update_votes( const account_name voter, const account_name proxy, const std::vector<account_name>& producers, bool voting );
 
          // defined in voting.cpp
-         void propagate_weight_change( const voter_info& voter );
+         // void propagate_weight_change( const voter_info& voter );
+
+         void update_votes( const account_name burner, const account_name target_producer, asset quantity );
    };
 
 } /// eosiosystem
